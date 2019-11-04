@@ -1,27 +1,35 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const passport = require('passport')
 
-
-
+//Routes - DB config
 const routes = require('./routes/api')
-
+const { keys } = require('./config');
 
 const app = express();
 
-const db = require('./config/keys').mongoURI;
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
+
+
+mongoose.set('useCreateIndex', true)
 mongoose
-	.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+	.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 	.then(() => console.log(`Database has connected successfully`))
-	.catch(console.log)
+	.catch((error) => {
+		console.log(error)
+	})
 
 
+//passport middleware
+app.use(passport.initialize());
 
 
-app.get('/', (req, res) => {
-	res.send('hello my niggas')
-});
+//passport config
 
+require('./config/passport')(passport)
 
 
 //Routes
@@ -42,7 +50,7 @@ app.use('/api/posts', routes.posts);
 
 
 
-const PORT = process.env.PORT ? process.env.PORT : 5000
+const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
 	console.log(`Server running on ${ PORT }`)
 })
