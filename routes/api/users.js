@@ -7,7 +7,7 @@ const passport = require('passport')
 
 const keys = require('../../config/keys')
 const User = require('../../models/User')
-const { registration, login } = require('../../helper/validation')
+const { validateRegistration, validateLogin } = require('../../helper/validation')
 
 
 
@@ -34,7 +34,7 @@ router.post('/register', async (req, res, next) => {
 	const saltRounds = 10;
 	// destructred validation helper function take req.body as param
 	//to validate data from client
-	const { errors, isValid } = registration(req.body)
+	const { errors, isValid } = validateRegistration(req.body)
 
 	//if req is not valid send status 400
 	if (!isValid) {
@@ -90,7 +90,7 @@ router.post('/login', async (req, res, next) => {
 
 	// destructred validation helper function take req.body as param
 	//to validate data from client
-	const { errors, isValid } = login(req.body)
+	const { errors, isValid } = validateLogin(req.body)
 
 	//if req is not valid send status 400
 	if (!isValid) {

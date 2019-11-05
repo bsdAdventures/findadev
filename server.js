@@ -15,6 +15,7 @@ app.use(bodyParser.json())
 
 
 mongoose.set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false)
 mongoose
 	.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 	.then(() => console.log(`Database has connected successfully`))

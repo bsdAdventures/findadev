@@ -1,5 +1,5 @@
 const Validator = require('validator');
-const isEmpty = require('./is-empty');
+const { isEmpty } = require('../functions');
 
 
 module.exports = function validate_registration (data) {

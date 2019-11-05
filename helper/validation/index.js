@@ -1,5 +1,5 @@
 module.exports = {
-	isEmpty: require('./is-empty'),
-	registration: require('./registration'),
-	login: require('./login')
+	validateRegistration: require('./registration'),
+	validateLogin: require('./login'),
+	validateProfile: require('./profile')
 }
