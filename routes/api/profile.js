@@ -3,10 +3,13 @@ const router = express.Router();
 const passport = require('passport')
 const mongoose = require('mongoose')
 
+const { validateProfile, validateExperience, validateEducation } = require('../../helper/validation')
+const { User, Profile } = require('../../models')
 
-const { validateProfile } = require('../../helper/validation')
-const Profile = require('../../models/Profile')
-const User = require('../../models/User')
+
+
+
+
 
 // @route 			GET api/profile
 // @description		GET current user profile
@@ -217,8 +220,194 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
 
 
 
+// @route 			Post api/profile/experience
+// @description		Add experience to profile
+// @access 			private
 
 
+router.post('/experience', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+
+	const { id } = req.user;
+	const { title, company, location, from, to, current, description } = req.body
+
+	const { errors, isValid } = validateExperience(req.body)
+
+	//if req is not valid send status 400
+	if (!isValid) {
+		return res.status(400).json(errors)
+	}
+
+
+	try {
+		//check if profile exists by id
+		const existingProfile = await Profile.findOne({ user: id });
+
+		if (existingProfile) {
+			//create object to hold expereince
+			const newExperience = { title, company, location, from, to, current, description };
+
+			//append new experiece to existing profile
+			existingProfile.experience.unshift(newExperience)
+
+			//save experience to database
+			const saveExperience = await existingProfile.save()
+
+			//send response to client
+			if (saveExperience) res.json(saveExperience)
+		}
+	} catch (error) {
+		res.status(404).json(error)
+	}
+
+})
+
+
+// @route 			Post api/profile/education
+// @description		Add education to profile
+// @access 			private
+
+
+router.post('/education', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+
+	const { id } = req.user;
+	const { school, degree, fieldofstudy, from, to, current, description } = req.body
+
+	const { errors, isValid } = validateEducation(req.body)
+
+	//if req is not valid send status 400
+	if (!isValid) {
+		return res.status(400).json(errors)
+	}
+
+
+	try {
+		//check if profile exists by id
+		const existingProfile = await Profile.findOne({ user: id });
+
+		if (existingProfile) {
+			//create object to hold education
+			const newEducation = { school, degree, fieldofstudy, from, to, current, description };
+
+			//append new education to existing profile
+			existingProfile.education.unshift(newEducation)
+
+			//save education to database
+			const saveEducation = await existingProfile.save()
+
+			//send response to client
+			if (saveEducation) res.json(saveEducation)
+		}
+	} catch (error) {
+		res.status(404).json(error)
+	}
+
+})
+
+
+// @route 			DELETE api/profile/experience/:exp_id
+// @description		DELETE experience from profile
+// @access 			private
+
+
+router.delete('/experience/:exp_id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+
+	const { id } = req.user;
+	const { exp_id } = req.params
+
+	try {
+		//check if profile exists by id
+		const existingProfile = await Profile.findOne({ user: id });
+
+		if (existingProfile) {
+			//find index of experience to delete
+			const removeIndex = existingProfile.experience
+				.map(item => item.id)
+				.indexOf(exp_id)
+
+			//remove index from object
+			existingProfile.experience.splice(removeIndex, 1)
+
+			//save to database
+			const deleteExperience = await existingProfile.save()
+
+			//send response to client
+			if (deleteExperience) res.json(deleteExperience)
+		}
+	} catch (error) {
+		res.status(404).json(error)
+	}
+
+})
+
+
+// @route 			DELETE api/profile/education/:edu_id
+// @description		DELETE education from profile
+// @access 			private
+
+
+router.delete('/education/:edu_id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+
+	const { id } = req.user;
+	const { edu_id } = req.params
+
+	try {
+		//check if profile exists by id
+		const existingProfile = await Profile.findOne({ user: id });
+
+		if (existingProfile) {
+			//find index of experience to delete
+			const removeIndex = existingProfile.education
+				.map(item => item.id)
+				.indexOf(edu_id)
+
+
+
+			//remove index from object
+			existingProfile.education.splice(removeIndex, 1)
+
+			//save to database
+			const deleteEducation = await existingProfile.save()
+
+			//send response to client
+			if (deleteEducation) res.json(deleteEducation)
+		}
+	} catch (error) {
+		res.status(404).json(error)
+	}
+
+})
+
+
+// @route 			DELETE api/profile
+// @description		DELETE user and profile
+// @access 			private
+
+
+router.delete('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+	const { id } = req.user;
+
+	try {
+		//check if profile exists by id
+		const existingProfile = await Profile.findOneAndRemove({ user: id });
+
+		if (existingProfile) {
+			//find user by id from user model and delete
+
+			const deleteUser = await User.findOneAndRemove({ _id: id })
+
+			if (deleteUser) res.json({ success: true })
+
+		}
+	} catch (error) {
+		res.status(500).json(error)
+	}
+
+})
 
 
 

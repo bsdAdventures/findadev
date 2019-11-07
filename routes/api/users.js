@@ -6,20 +6,8 @@ const jwt = require('jsonwebtoken')
 const passport = require('passport')
 
 const keys = require('../../config/keys')
-const User = require('../../models/User')
+const { User } = require('../../models')
 const { validateRegistration, validateLogin } = require('../../helper/validation')
-
-
-
-
-// const getIp = async () => {
-// 	try {
-// 		const response = await axios.get('https://ipapi.co/json/');
-// 		console.log(response)
-// 	} catch (axiosErr) {
-// 		console.log(axiosErr)
-// 	}
-// }
 
 
 
@@ -136,22 +124,6 @@ router.post('/login', async (req, res, next) => {
 
 })
 
-
-
-
-
-// @route 			GET api/users/login
-// @description		login user / return JWT TOKEN
-// @access 			public
-
-
-
-router.get('/current', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
-	// console.log(req, res, 'req,rep')
-
-	res.json('kjdnskjdsnkj')
-
-})
 
 
 module.exports = router;
