@@ -15,9 +15,10 @@ module.exports = async passport => {
 			try {
 				const foundUser = await User.findById(payload.id)
 				if (foundUser) {
-					const { id, name, email } = foundUser
+					const { id, name, email, avatar } = foundUser
 
-					return done(null, { id, name, email });
+
+					return done(null, { id, name, email, avatar });
 				}
 				return done(null, false);
 

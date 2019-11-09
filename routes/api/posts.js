@@ -81,7 +81,7 @@ router.get('/:id', async (req, res) => {
 // @access 			private
 
 router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-	//comes from password
+	//comes from passport
 	const { id } = req.user
 
 	try {
@@ -123,26 +123,34 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), async (r
 
 router.post('/like/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
 
-	try {
 
-		const findUser = await Profile.findOne({ user: req.user.id })
+	const { id, name, avatar } = req.user
+	const { id: paramId } = req.params
+
+	try {
+		//check if use exists in datababse
+		const findUser = await Profile.findOne({ user: id })
+
 		if (findUser) {
 			//find post to be deleted by post id
-			const post = await Post.findById(req.params.id)
+			const post = await Post.findById(paramId)
 			if (post) {
-				if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
+
+				//return message if user already liked
+				if (post.likes.filter(like => like.user.toString() === id).length > 0) {
 					return res.status(400).json({ alreadyliked: 'User already liked this post' })
 				}
+				//add user object to the beginging of likes array
+				post.likes.unshift({ user: id, avatar: avatar, name: name })
 
-				post.likes.unshift({ user: req.user.id })
+				//save to database
 				const addLikes = await post.save()
 
+				//respond to client
 				if (addLikes) res.json(addLikes)
 
 			}
 		}
-
-
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).json({ noPost: 'No Post found' });
@@ -150,6 +158,139 @@ router.post('/like/:id', passport.authenticate('jwt', { session: false }), async
 
 })
 
+
+
+
+// @route 			POST api/posts/unlike/:id
+// @description		Unlike post by id
+// @access 			private
+
+router.post('/unlike/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+
+	const { id } = req.user
+	const { id: paramId } = req.params
+
+	try {
+		//check if use exists in datababse
+		const findUser = await Profile.findOne({ user: id })
+
+		if (findUser) {
+			//find post to be deleted by post id
+			const post = await Post.findById(paramId)
+			if (post) {
+
+				//return message if user did not like
+				if (post.likes.filter(like => like.user.toString() === id).length === 0) {
+					return res.status(400).json({ notliked: 'You have not liked this post' })
+				}
+
+				//find post liked index
+				const postIndex = post.likes.map(item => item.user.toString()).indexOf(id)
+
+				//place out of array
+				post.likes.splice(postIndex, 1)
+
+				// save to database
+				const unLike = await post.save()
+				//respond to client
+				if (unLike) res.json(unLike)
+
+			}
+		}
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({ noPost: 'No Post found' });
+	}
+
+})
+
+
+
+// @route 			POST api/posts/comment/:id
+// @description		Add comment to post
+// @access 			private
+
+
+router.post('/comment/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+	const { text, name, avatar } = req.body
+	const { id } = req.user
+	const { id: paramId } = req.params
+
+	//validate request
+	const { errors, isValid } = validatePost(req.body)
+
+	//if req is not valid send status 400
+	if (!isValid) {
+		return res.status(400).json(errors)
+	}
+
+	try {
+		//find post to add comment
+		const post = await Post.findById(paramId)
+		if (post) {
+			//create comment object
+			const newComment = { text, name, avatar, user: id }
+
+			//add new comment object to coments array
+			post.comments.unshift(newComment)
+
+			//save to database
+			const saveComment = await post.save()
+			//respond to client
+			if (saveComment) res.json(saveComment)
+		}
+
+
+	} catch (error) {
+		console.error(err.message);
+		res.status(500).send('Server Error');
+	}
+
+})
+
+
+
+// @route 			DELETE api/posts/comment/:id/:comment_id
+// @description		Delete comment from post
+// @access 			private
+
+
+router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+
+
+	const { id, comment_id } = req.params
+
+
+	try {
+		//find post to be deleted by post id
+		const post = await Post.findById(id)
+		if (post) {
+			//check if comment exits
+			if (post.comments.filter(comment => comment._id.toString() === comment_id).length === 0) {
+				return res.status(400).json({ nocomment: 'Comment does not exist' })
+
+			}
+
+			const commentIndex = post.comments.map(item => item._id.toString()).indexOf(comment_id);
+
+			// Splice comment out of array
+			post.comments.splice(commentIndex, 1);
+
+			//save to database
+			const removeComment = await post.save()
+			//respond to client
+			if (removeComment) res.json(removeComment)
+		}
+
+
+	} catch (error) {
+		console.error(err.message);
+		res.status(500).send('Server Error');
+	}
+
+})
 
 
 module.exports = router;
