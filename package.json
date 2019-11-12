@@ -7,7 +7,8 @@
     "server": "nodemon server.js",
     "client-install": "npm install --prefix client",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \" npm run client\""
+    "dev": "concurrently \"npm run server\" \" npm run client\"",
+    "stop-node": "killall node"
   },
   "author": "bsd",
   "license": "MIT",
