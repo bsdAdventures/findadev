@@ -52,6 +52,20 @@ export const loginuser = data => async dispatch => {
   }
 };
 
+export const logoutUser = () => async dispatch => {
+  dispatch({ type: types.LOG_OUT_REQUEST });
+  //remove token from local storage
+  localStorage.removeItem("token");
+
+  //remove token from authorzation headers
+  setAuthToken(false);
+
+  //set current user
+  dispatch(setCurrentUser({}));
+
+  dispatch({ type: types.LOGIN_USER_SUCCESS });
+};
+
 export const setCurrentUser = decoded => {
   return {
     type: types.SET_CURRENT_USER,

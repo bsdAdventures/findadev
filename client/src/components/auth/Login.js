@@ -13,6 +13,13 @@ class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    const { history } = this.props;
+    if (this.props.auth.isAuthenticated) {
+      history.push("/dashboard");
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const { history } = this.props;
 
