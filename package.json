@@ -8,7 +8,7 @@
     "client-install": "npm install --prefix client",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \" npm run client\"",
-    "stop-node": "killall node"
+    "node": "killall node"
   },
   "author": "bsd",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "mongoose": "^5.7.7",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "redux-logger": "^3.0.6",
     "validator": "^12.0.0"
   },
   "devDependencies": {

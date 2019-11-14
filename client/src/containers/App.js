@@ -2,8 +2,20 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Provider } from "react-redux";
-import { configureStore, setCurrentUser, logoutUser } from "../redux";
-import { Navbar, Landing, Footer, Register, Login } from "../components";
+import {
+  configureStore,
+  setCurrentUser,
+  logoutUser,
+  clearCurrentProfile
+} from "../redux";
+import {
+  Navbar,
+  Landing,
+  Footer,
+  Register,
+  Login,
+  Dashboard
+} from "../components";
 import { setAuthToken } from "../utils";
 import "./App.css";
 
@@ -24,6 +36,10 @@ if (localStorage.token) {
     //log user out
     store.dispatch(logoutUser());
 
+    //clear user profile
+
+    store.dispatch(clearCurrentProfile());
+
     //redirect to login
     window.location.href = "/login";
   }
@@ -40,6 +56,7 @@ export default class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/dashboard" component={Dashboard} />
             </div>
             <Footer />
           </div>

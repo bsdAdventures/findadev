@@ -2,12 +2,15 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "../../redux/actions";
+import { logoutUser, clearCurrentProfile } from "../../redux/actions";
 
 class Navbar extends Component {
   onLogoutClick = e => {
     e.preventDefault();
-    this.props.logoutUser();
+
+    const { logoutUser, clearCurrentProfile } = this.props;
+    logoutUser();
+    clearCurrentProfile();
   };
 
   render() {
@@ -26,7 +29,7 @@ class Navbar extends Component {
           </Link>
         </li>
         <li className="nav-item">
-          <a href="" onClick={this.onLogoutClick} className="nav-link">
+          <a href="#top" onClick={this.onLogoutClick} className="nav-link">
             <img
               className="rounded-circle"
               src={user.avatar}
@@ -101,4 +104,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { logoutUser })(Navbar);
+export default connect(mapStateToProps, { logoutUser, clearCurrentProfile })(
+  Navbar
+);
