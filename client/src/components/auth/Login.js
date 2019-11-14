@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginuser } from "../../redux/actions";
+import { loginuser } from "../../redux";
+import { TextField } from "../common";
 
 class Login extends Component {
   constructor(props) {
@@ -61,36 +62,22 @@ class Login extends Component {
                 Welcome, sign in to your FindaDev account
               </p>
               <form onSubmit={this.handleOnLogin}>
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={`form-control form-control-lg ${
-                      errors.email ? "is-invalid" : ""
-                    }`}
-                    placeholder="Email Address"
-                    name="email"
-                    value={email}
-                    onChange={this.handleOnInputChange}
-                  />
-                  {errors.email && (
-                    <div className="invalid-feedback"> {errors.email}</div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={`form-control form-control-lg ${
-                      errors.password ? "is-invalid" : ""
-                    }`}
-                    placeholder="Password"
-                    name="password"
-                    value={password}
-                    onChange={this.handleOnInputChange}
-                  />
-                  {errors.password && (
-                    <div className="invalid-feedback"> {errors.password}</div>
-                  )}
-                </div>
+                <TextField
+                  placeholder="Email Address"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={this.handleOnInputChange}
+                  error={errors.email}
+                />
+                <TextField
+                  placeholder="Password"
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={this.handleOnInputChange}
+                  error={errors.password}
+                />
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
