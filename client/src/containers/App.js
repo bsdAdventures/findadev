@@ -15,7 +15,8 @@ import {
   Register,
   Login,
   Dashboard,
-  PrivateRoute
+  PrivateRoute,
+  CreateProfile
 } from "../components";
 import { setAuthToken } from "../utils";
 import "./App.css";
@@ -59,6 +60,13 @@ export default class App extends Component {
               <Route exact path="/login" component={Login} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/createprofile"
+                  component={CreateProfile}
+                />
               </Switch>
             </div>
             <Footer />
