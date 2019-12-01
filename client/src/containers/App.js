@@ -21,7 +21,8 @@ import {
   AddExperience,
   AddEducation,
   Profiles,
-  Profile
+  Profile,
+  NotFound
 } from "../components";
 import { setAuthToken } from "../utils";
 import "./App.css";
@@ -98,6 +99,7 @@ export default class App extends Component {
               <Switch>
                 <PrivateRoute exact path="/profiles" component={Profiles} />
               </Switch>
+              <Route exact path="/not-found" component={NotFound} />
             </div>
             <Footer />
           </div>
