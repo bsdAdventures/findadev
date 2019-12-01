@@ -9,7 +9,7 @@ export const profileReducer = (
   action
 ) => {
   switch (action.type) {
-    case types.GET_USER_PROFILE_REQUEST:
+    case types.PROFILE_LOADING:
       return {
         ...state,
         loading: true
@@ -18,6 +18,12 @@ export const profileReducer = (
       return {
         ...state,
         profile: action.payload,
+        loading: false
+      };
+    case types.GET_USER_PROFILES_SUCCESS:
+      return {
+        ...state,
+        profiles: action.payload,
         loading: false
       };
     case types.CLEAR_USER_PROFILE:

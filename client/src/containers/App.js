@@ -17,7 +17,11 @@ import {
   Dashboard,
   PrivateRoute,
   CreateProfile,
-  EditProfile
+  EditProfile,
+  AddExperience,
+  AddEducation,
+  Profiles,
+  Profile
 } from "../components";
 import { setAuthToken } from "../utils";
 import "./App.css";
@@ -59,6 +63,7 @@ export default class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/profile/:handle" component={Profile} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
@@ -75,6 +80,23 @@ export default class App extends Component {
                   path="/edit-profile"
                   component={EditProfile}
                 />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-experience"
+                  component={AddExperience}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-education"
+                  component={AddEducation}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/profiles" component={Profiles} />
               </Switch>
             </div>
             <Footer />

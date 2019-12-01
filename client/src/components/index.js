@@ -5,3 +5,7 @@ export * from "./common";
 export * from "./dashboard";
 export * from "./createprofile";
 export * from "./editprofile";
+export * from "./addeducation";
+export * from "./addexperience";
+export * from "./profile";
+export * from "./profiles";
