@@ -23,7 +23,8 @@ import {
   Profiles,
   Profile,
   NotFound,
-  Posts
+  Posts,
+  Post
 } from "../components";
 import { setAuthToken } from "../utils";
 import "./App.css";
@@ -103,6 +104,9 @@ export default class App extends Component {
               </Switch>
               <Switch>
                 <PrivateRoute exact path="/feed" component={Posts} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/post/:id" component={Post} />
               </Switch>
             </div>
             <Footer />
