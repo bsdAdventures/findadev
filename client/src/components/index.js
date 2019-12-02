@@ -10,3 +10,4 @@ export * from "./addexperience";
 export * from "./profile";
 export * from "./profiles";
 export * from "./notfound";
+export * from "./posts";

@@ -21,9 +21,10 @@ router.post(
       return res.status(400).json(errors);
     }
     //destructing object being sent via POST by client to create posts
-    const { name, text, avatar, user } = req.body;
+    const { name, text, avatar } = req.body;
     //craete new post object
-    const newPost = new Post({ name, text, avatar, user });
+    const newPost = new Post({ name, text, avatar, user: req.user.id });
+
     try {
       //save post to database
       const addNewPost = await newPost.save();

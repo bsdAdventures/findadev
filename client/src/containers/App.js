@@ -22,7 +22,8 @@ import {
   AddEducation,
   Profiles,
   Profile,
-  NotFound
+  NotFound,
+  Posts
 } from "../components";
 import { setAuthToken } from "../utils";
 import "./App.css";
@@ -65,6 +66,7 @@ export default class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/profile/:handle" component={Profile} />
+              <Route exact path="/not-found" component={NotFound} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
@@ -99,7 +101,9 @@ export default class App extends Component {
               <Switch>
                 <PrivateRoute exact path="/profiles" component={Profiles} />
               </Switch>
-              <Route exact path="/not-found" component={NotFound} />
+              <Switch>
+                <PrivateRoute exact path="/feed" component={Posts} />
+              </Switch>
             </div>
             <Footer />
           </div>
